@@ -17,6 +17,7 @@ sudo apt install -y \
     tmux \
     xclip \
     fzf \
+    ripgrep \
     npm
 
 # Neovim — needs PPA for latest version (0.11+)

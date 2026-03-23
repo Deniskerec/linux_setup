@@ -606,7 +606,7 @@ require('lazy').setup({
         jdtls = {},    -- Java
         sqlls = {},    -- SQL
         -- rust_analyzer = {},
-        -- ts_ls = {},
+        ts_ls = {},    -- TypeScript/JavaScript
 
         stylua = {}, -- Used to format Lua code
 

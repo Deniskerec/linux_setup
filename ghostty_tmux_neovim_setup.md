@@ -338,6 +338,9 @@ sudo apt install neovim
 # tree-sitter-cli (needed by nvim-treesitter for syntax highlighting)
 sudo npm install -g tree-sitter-cli
 
+# ripgrep (needed by telescope for live grep / search in files)
+sudo apt install ripgrep
+
 # Clone kickstart.nvim (minimal, batteries-included starter config)
 git clone https://github.com/nvim-lua/kickstart.nvim.git ~/.config/nvim
 ```
@@ -376,22 +379,68 @@ Press `Ctrl+n` to toggle the file explorer sidebar.
 
 ### Neovim Keyboard Shortcuts (kickstart defaults)
 
+**File Navigation:**
+
 | Action | Shortcut |
 |--------|----------|
-| File explorer | `Ctrl+n` |
+| File explorer toggle | `Ctrl+n` |
 | Fuzzy find files | `<Space>sf` |
 | Fuzzy grep (search in files) | `<Space>sg` |
-| Switch open buffers | `<Space>sb` |
+| Switch open buffers | `<Space><Space>` (double space) |
+| Recent files | `<Space>s.` |
+| Jump between explorer and file | `Ctrl+w h` / `Ctrl+w l` |
+
+**Code Navigation (requires LSP):**
+
+| Action | Shortcut |
+|--------|----------|
 | Go to definition | `gd` |
-| Go to references | `gr` |
+| Go to declaration | `gD` |
+| Go to implementation | `gi` |
+| Find all references (usages) | `gr` |
 | Hover docs | `K` |
+| Go back | `Ctrl+o` |
+| Go forward | `Ctrl+i` |
+
+**Code Editing:**
+
+| Action | Shortcut |
+|--------|----------|
 | Rename symbol | `<Space>rn` |
-| Code action | `<Space>ca` |
+| Code action (quick fix) | `<Space>ca` |
 | Format file | `<Space>f` |
 | Next diagnostic | `]d` |
 | Previous diagnostic | `[d` |
+| Find & replace in file | `:%s/old/new/g` |
 
-`<Space>` is the leader key. Press it and wait — a popup shows available commands.
+**Basics:**
+
+| Action | Shortcut |
+|--------|----------|
+| Undo | `u` |
+| Redo | `Ctrl+r` |
+| Save | `:w` |
+| Quit | `:q` |
+| Save + quit | `:wq` |
+| Delete line | `dd` |
+| Copy line | `yy` |
+| Paste | `p` |
+| Select text | `v` + move cursor |
+| Top of file | `gg` |
+| Bottom of file | `G` |
+| Go to line 42 | `42G` |
+| Search in file | `/something` then `n` for next |
+
+`<Space>` is the leader key. Press it and wait — a popup shows all available commands.
+
+### LSP Servers (auto-installed via Mason)
+- **pyright** — Python
+- **ts_ls** — TypeScript/JavaScript
+- **jdtls** — Java
+- **sqlls** — SQL
+- **lua_ls** — Lua
+
+These enable go-to-definition, find references, hover docs, rename, etc. for each language.
 
 ---
 
@@ -414,5 +463,5 @@ Press `Ctrl+n` to toggle the file explorer sidebar.
 - Press `<Space>` (leader key) and wait — a popup shows all available commands.
 - Neo-tree file explorer toggles with `Ctrl+n`.
 - To jump between explorer and file: `Ctrl+w h` (left) and `Ctrl+w l` (right).
-- Switch between open files with `<Space>sb` (fuzzy buffer list).
+- Switch between open files with `<Space><Space>` (double space — fuzzy buffer list).
 - Ubuntu apt neovim is too old (0.9) — must use PPA for 0.11+.
