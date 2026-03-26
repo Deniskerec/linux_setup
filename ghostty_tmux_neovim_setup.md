@@ -24,6 +24,8 @@ configs/
   nvim/lua/config/keymaps.lua         -> ~/.config/nvim/lua/config/keymaps.lua
   nvim/lua/config/autocmds.lua        -> ~/.config/nvim/lua/config/autocmds.lua
   nvim/lua/plugins/neo-tree.lua       -> ~/.config/nvim/lua/plugins/neo-tree.lua
+  nvim/lua/plugins/lang-java.lua      -> ~/.config/nvim/lua/plugins/lang-java.lua
+  nvim/lua/plugins/lang-sql.lua       -> ~/.config/nvim/lua/plugins/lang-sql.lua
 dev                                   -> ~/.local/bin/dev
 tmux-sessionizer                      -> ~/.local/bin/tmux-sessionizer
 install.sh                            — one-command setup
@@ -309,6 +311,17 @@ tmux attach-session -t "$SESSION"
 | List all sessions | `tmux ls` |
 | Kill the dev session | `tmux kill-session -t dev` |
 | Kill ALL sessions | `tmux kill-server` |
+| **Wipe everything and start fresh** | **`tmux-clean`** |
+
+### `tmux-clean` alias
+Kills tmux, deletes all tmux-resurrect saved sessions AND neovim persistence sessions. Next time you run `dev`, everything starts completely fresh — no zombie windows or old buffers.
+
+```bash
+# What it does:
+rm -f ~/.local/share/tmux/resurrect/*   # tmux saved sessions
+rm -f ~/.local/state/nvim/sessions/*    # neovim saved sessions
+tmux kill-server                        # stop tmux
+```
 
 ### tmux Keyboard Shortcuts
 Prefix is `Ctrl+a` (not the default `Ctrl+b`).
@@ -355,13 +368,17 @@ nvim/
 ├── lazyvim.json          # LazyVim version/extras tracking
 └── lua/
     ├── config/
-    │   ├── lazy.lua      # lazy.nvim + LazyVim setup
-    │   ├── options.lua   # Custom options
-    │   ├── keymaps.lua   # Custom keymaps
+    │   ├── lazy.lua      # lazy.nvim + LazyVim setup + language extras
+    │   ├── options.lua   # Custom options (relative numbers, 4-space tabs, etc.)
+    │   ├── keymaps.lua   # Custom keymaps (FzfLua, LSP, window nav, editing QoL)
     │   └── autocmds.lua  # Custom autocmds
     └── plugins/
-        └── neo-tree.lua  # Ctrl+N toggle override
+        ├── neo-tree.lua    # Ctrl+N toggle override
+        ├── lang-java.lua   # Java/Spring Boot: jdtls config, debug, test tools
+        └── lang-sql.lua    # SQL: sqlls LSP + vim-dadbod DB connections
 ```
+
+**Language extras loaded in `lazy.lua`:** Java, Python, TypeScript/JavaScript, SQL, Prettier
 
 ### First Launch
 Open neovim once — LazyVim will auto-install all plugins:
@@ -370,8 +387,15 @@ nvim
 ```
 Wait for downloads to finish, then quit with `:q`.
 
-### Adding Language Support (Extras)
-Inside neovim, run `:LazyExtras` to browse and enable language-specific extras (Python, TypeScript, Java, etc.). These automatically configure LSP, formatters, linters, and treesitter for each language.
+### Language Support
+Already configured out of the box via `lazy.lua` imports:
+- **Java + Spring Boot** — jdtls, debug adapter, test runner, Spring Boot completion
+- **Python** — pyright + ruff
+- **TypeScript / JavaScript** — vtsls + ESLint
+- **SQL** — sqlls LSP + vim-dadbod for live DB connections (`<leader>Du` to open)
+- **Prettier** — formatting for JS/TS/JSON/CSS/HTML
+
+To add more, run `:LazyExtras` inside neovim.
 
 ### File Explorer (Neo-tree)
 LazyVim includes Neo-tree by default. Press `Ctrl+n` to toggle the file explorer sidebar (custom keybinding preserved from old config).
@@ -446,12 +470,14 @@ LazyVim includes Neo-tree by default. Press `Ctrl+n` to toggle the file explorer
 `<Space>` is the leader key. Press it and wait — which-key popup shows all available commands.
 
 ### LSP Servers (auto-installed via Mason)
-LazyVim auto-configures Mason. Enable language extras via `:LazyExtras` for full LSP support. Common extras:
-- `lang.python` — pyright + ruff
-- `lang.typescript` — ts_ls + eslint
-- `lang.java` — jdtls
-- `lang.json` — jsonls
-- `lang.lua` — lua_ls
+All of these install automatically on first launch:
+- `jdtls` — Java + Spring Boot
+- `java-debug-adapter` + `java-test` — Java debugging/testing
+- `pyright` — Python
+- `vtsls` + `typescript-language-server` — TypeScript/JavaScript
+- `sqlls` — SQL
+- `prettier` — JS/TS/JSON/CSS formatting
+- `lua-language-server` — Lua (nvim config)
 
 ---
 

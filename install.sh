@@ -87,7 +87,9 @@ cp "$SCRIPT_DIR/configs/nvim/lua/config/options.lua" ~/.config/nvim/lua/config/o
 cp "$SCRIPT_DIR/configs/nvim/lua/config/keymaps.lua" ~/.config/nvim/lua/config/keymaps.lua
 cp "$SCRIPT_DIR/configs/nvim/lua/config/autocmds.lua" ~/.config/nvim/lua/config/autocmds.lua
 cp "$SCRIPT_DIR/configs/nvim/lua/plugins/neo-tree.lua" ~/.config/nvim/lua/plugins/neo-tree.lua
-echo "  -> LazyVim config -> ~/.config/nvim (with Ctrl+n neo-tree toggle)"
+cp "$SCRIPT_DIR/configs/nvim/lua/plugins/lang-java.lua" ~/.config/nvim/lua/plugins/lang-java.lua
+cp "$SCRIPT_DIR/configs/nvim/lua/plugins/lang-sql.lua" ~/.config/nvim/lua/plugins/lang-sql.lua
+echo "  -> LazyVim config -> ~/.config/nvim (Java, Python, TS, SQL, keymaps)"
 
 # --- 7. Install scripts ---
 echo "[7/8] Installing scripts..."
@@ -107,8 +109,13 @@ if ! echo "$PATH" | grep -q "$HOME/.local/bin"; then
     echo '     export PATH="$HOME/.local/bin:$PATH"'
 fi
 
-# --- 8. Final steps ---
-echo "[8/8] Final steps..."
+# --- 8. Claude Code multi-account ---
+echo "[8/9] Setting up Claude Code directories..."
+mkdir -p ~/.claude-private
+echo "  -> ~/.claude-private created (for private Claude account)"
+
+# --- 9. Final steps ---
+echo "[9/9] Final steps..."
 echo ""
 echo "=== Setup complete! ==="
 echo ""
@@ -118,6 +125,12 @@ echo "  2. Install Claude Code: npm install -g @anthropic-ai/claude-code"
 echo "  3. Log out and back in (for zsh to take effect)"
 echo "  4. Open tmux and press C-a I to install tmux plugins"
 echo "  5. Open neovim once (nvim) — LazyVim will auto-install all plugins, then quit (:q)"
-echo "  6. Use :LazyExtras inside neovim to enable language-specific extras"
+echo "  6. Run 'claude-private' once to log in to your private Claude account"
 echo "  7. Type 'dev' to start your dev session"
+echo ""
+echo "Useful aliases:"
+echo "  dev             — start tmux dev session (3 windows: neovim, claude, terminal)"
+echo "  tmux-clean      — wipe all saved sessions and start fresh"
+echo "  claude-work     — Claude with Ridango account"
+echo "  claude-private  — Claude with private account"
 echo ""
