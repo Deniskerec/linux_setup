@@ -6,8 +6,38 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "=== Ubuntu Dev Environment Setup ==="
 echo ""
 
-# --- 1. Install packages ---
-echo "[1/8] Installing packages..."
+# --- 1. SSH key ---
+echo "[1/10] SSH key setup..."
+if [ -f "$HOME/.ssh/id_ed25519" ]; then
+    echo "  -> SSH key already exists"
+else
+    ssh-keygen -t ed25519 -C "$(whoami)@$(hostname)" -f "$HOME/.ssh/id_ed25519" -N ""
+    echo ""
+    echo "========================================="
+    echo "  Your new SSH public key:"
+    echo "========================================="
+    cat "$HOME/.ssh/id_ed25519.pub"
+    echo ""
+    echo "========================================="
+    echo "  Add this key to GitHub:"
+    echo "  https://github.com/settings/ssh/new"
+    echo "========================================="
+    echo ""
+    read -p "Press ENTER after you've added the key to GitHub..."
+fi
+
+# Test GitHub connection
+echo "  -> Testing GitHub SSH connection..."
+if ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
+    echo "  -> GitHub SSH connection works!"
+else
+    echo "  -> WARNING: GitHub SSH test didn't confirm. You may need to add the key."
+    echo "     Key: $(cat ~/.ssh/id_ed25519.pub)"
+    read -p "Press ENTER to continue anyway..."
+fi
+
+# --- 2. Install packages ---
+echo "[2/10] Installing packages..."
 sudo apt update
 sudo apt install -y \
     zsh \
@@ -17,8 +47,7 @@ sudo apt install -y \
     tmux \
     xclip \
     fzf \
-    ripgrep \
-    npm
+    ripgrep
 
 # Neovim — needs PPA for latest version (0.11+)
 echo "  -> Adding neovim PPA for latest version..."
@@ -26,58 +55,82 @@ sudo add-apt-repository -y ppa:neovim-ppa/unstable
 sudo apt update
 sudo apt install -y neovim
 
-# tree-sitter-cli — needed by nvim-treesitter
-sudo npm install -g tree-sitter-cli
+# --- 3. Install NVM + Node ---
+echo "[3/10] Installing NVM + Node..."
+if [ -d "$HOME/.nvm" ]; then
+    echo "  -> NVM already installed"
+else
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+fi
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+nvm install --lts
+echo "  -> Node $(node --version) installed"
 
-# --- 2. Set zsh as default shell ---
-echo "[2/7] Setting zsh as default shell..."
+# tree-sitter-cli — needed by nvim-treesitter
+npm install -g tree-sitter-cli
+
+# --- 4. Install Ghostty ---
+echo "[4/10] Installing Ghostty..."
+if command -v ghostty &>/dev/null; then
+    echo "  -> Ghostty already installed"
+else
+    # Ghostty official apt repository
+    curl -fsSL https://pkg.ghostty.org/pubkey.gpg | sudo tee /usr/share/keyrings/ghostty-archive-keyring.gpg > /dev/null
+    echo "deb [signed-by=/usr/share/keyrings/ghostty-archive-keyring.gpg] https://pkg.ghostty.org/apt stable main" | sudo tee /etc/apt/sources.list.d/ghostty.list
+    sudo apt update
+    sudo apt install -y ghostty
+    echo "  -> Ghostty installed"
+fi
+
+# --- 5. Install Claude Code ---
+echo "[5/10] Installing Claude Code..."
+if command -v claude &>/dev/null; then
+    echo "  -> Claude Code already installed"
+else
+    npm install -g @anthropic-ai/claude-code
+    echo "  -> Claude Code installed"
+fi
+
+# --- 6. Set zsh as default shell ---
+echo "[6/10] Setting zsh as default shell..."
 if [ "$SHELL" != "$(which zsh)" ]; then
     chsh -s "$(which zsh)"
-    echo "  -> zsh set as default shell (log out and back in to take effect)"
+    echo "  -> zsh set as default shell (takes effect after next login)"
 else
     echo "  -> already using zsh"
 fi
 
-# --- 3. Install Oh My Zsh ---
-echo "[3/7] Installing Oh My Zsh..."
+# --- 7. Install Oh My Zsh ---
+echo "[7/10] Installing Oh My Zsh..."
 if [ -d "$HOME/.oh-my-zsh" ]; then
     echo "  -> already installed"
 else
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
-# --- 4. Copy configs ---
-echo "[4/7] Copying configs..."
+# --- 8. Copy configs ---
+echo "[8/10] Copying configs..."
 
 # Ghostty
 mkdir -p ~/.config/ghostty
 cp "$SCRIPT_DIR/configs/ghostty.conf" ~/.config/ghostty/config
-echo "  -> Ghostty config -> ~/.config/ghostty/config"
+echo "  -> Ghostty config"
 
 # tmux
 cp "$SCRIPT_DIR/configs/tmux.conf" ~/.tmux.conf
-echo "  -> tmux config -> ~/.tmux.conf"
+echo "  -> tmux config"
 
 # zshrc
 cp "$SCRIPT_DIR/configs/zshrc" ~/.zshrc
-echo "  -> zshrc -> ~/.zshrc"
+echo "  -> zshrc"
 
-# --- 5. Install TPM (Tmux Plugin Manager) ---
-echo "[5/7] Installing TPM..."
-if [ -d "$HOME/.tmux/plugins/tpm" ]; then
-    echo "  -> already installed"
-else
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-fi
-
-# --- 6. Install LazyVim ---
-echo "[6/8] Installing LazyVim config..."
+# LazyVim
 if [ -d "$HOME/.config/nvim" ]; then
-    echo "  -> neovim config already exists, backing up to ~/.config/nvim.bak"
+    echo "  -> neovim config exists, backing up to ~/.config/nvim.bak"
     mv ~/.config/nvim ~/.config/nvim.bak.$(date +%s)
 fi
 
-# Copy our LazyVim config
 mkdir -p ~/.config/nvim/lua/config
 mkdir -p ~/.config/nvim/lua/plugins
 cp "$SCRIPT_DIR/configs/nvim/init.lua" ~/.config/nvim/init.lua
@@ -89,48 +142,52 @@ cp "$SCRIPT_DIR/configs/nvim/lua/config/autocmds.lua" ~/.config/nvim/lua/config/
 cp "$SCRIPT_DIR/configs/nvim/lua/plugins/neo-tree.lua" ~/.config/nvim/lua/plugins/neo-tree.lua
 cp "$SCRIPT_DIR/configs/nvim/lua/plugins/lang-java.lua" ~/.config/nvim/lua/plugins/lang-java.lua
 cp "$SCRIPT_DIR/configs/nvim/lua/plugins/lang-sql.lua" ~/.config/nvim/lua/plugins/lang-sql.lua
-echo "  -> LazyVim config -> ~/.config/nvim (Java, Python, TS, SQL, keymaps)"
+echo "  -> LazyVim config"
 
-# --- 7. Install scripts ---
-echo "[7/8] Installing scripts..."
+# --- 9. Install scripts + plugins ---
+echo "[9/10] Installing scripts and plugins..."
+
+# Scripts
 mkdir -p ~/.local/bin
-
 cp "$SCRIPT_DIR/dev" ~/.local/bin/dev
 chmod +x ~/.local/bin/dev
-echo "  -> dev -> ~/.local/bin/dev"
-
 cp "$SCRIPT_DIR/tmux-sessionizer" ~/.local/bin/tmux-sessionizer
 chmod +x ~/.local/bin/tmux-sessionizer
-echo "  -> tmux-sessionizer -> ~/.local/bin/tmux-sessionizer"
+echo "  -> dev + tmux-sessionizer scripts"
 
-# Make sure ~/.local/bin is in PATH
-if ! echo "$PATH" | grep -q "$HOME/.local/bin"; then
-    echo "  -> WARNING: ~/.local/bin is not in your PATH. Add it to ~/.zshrc:"
-    echo '     export PATH="$HOME/.local/bin:$PATH"'
+# TPM (Tmux Plugin Manager) + install plugins
+if [ -d "$HOME/.tmux/plugins/tpm" ]; then
+    echo "  -> TPM already installed"
+else
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
+echo "  -> Installing tmux plugins..."
+~/.tmux/plugins/tpm/bin/install_plugins
+echo "  -> tmux plugins installed"
 
-# --- 8. Claude Code multi-account ---
-echo "[8/9] Setting up Claude Code directories..."
+# LazyVim plugins — headless install
+echo "  -> Installing neovim plugins (headless)..."
+nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
+echo "  -> neovim plugins installed"
+
+# --- 10. Claude Code multi-account ---
+echo "[10/10] Setting up Claude Code..."
 mkdir -p ~/.claude-private
-echo "  -> ~/.claude-private created (for private Claude account)"
+echo "  -> ~/.claude-private created"
 
-# --- 9. Final steps ---
-echo "[9/9] Final steps..."
+# --- Done ---
 echo ""
 echo "=== Setup complete! ==="
 echo ""
-echo "Manual steps remaining:"
-echo "  1. Install Ghostty from https://ghostty.org (not in apt)"
-echo "  2. Install Claude Code: npm install -g @anthropic-ai/claude-code"
-echo "  3. Log out and back in (for zsh to take effect)"
-echo "  4. Open tmux and press C-a I to install tmux plugins"
-echo "  5. Open neovim once (nvim) — LazyVim will auto-install all plugins, then quit (:q)"
-echo "  6. Run 'claude-private' once to log in to your private Claude account"
-echo "  7. Type 'dev' to start your dev session"
+echo "Next steps:"
+echo "  1. Log out and back in (for zsh to take effect)"
+echo "  2. Run 'claude' to log in to your work Claude account"
+echo "  3. Run 'claude-private' to log in to your private Claude account"
+echo "  4. Type 'dev' to start your dev session"
 echo ""
-echo "Useful aliases:"
-echo "  dev             — start tmux dev session (3 windows: neovim, claude, terminal)"
-echo "  tmux-clean      — wipe all saved sessions and start fresh"
-echo "  claude-work     — Claude with Ridango account"
+echo "Aliases:"
+echo "  dev             — tmux dev session (neovim + claude + terminal)"
+echo "  tmux-clean      — wipe saved sessions and start fresh"
+echo "  claude-work     — Claude with work account"
 echo "  claude-private  — Claude with private account"
 echo ""
