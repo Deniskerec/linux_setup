@@ -1,0 +1,145 @@
+{
+  // --- Theme & Icons (Gruvbox - warm retro 90s hacker feel) ---
+  "workbench.colorTheme": "Gruvbox Material Dark",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.productIconTheme": "Default",
+
+  // --- Font (match your terminal) ---
+  "editor.fontFamily": "'JetBrains Mono', 'Fira Code', monospace",
+  "editor.fontSize": 14,
+  "editor.fontLigatures": true,
+  "editor.lineHeight": 1.6,
+
+  // --- Editor behavior (IntelliJ-like) ---
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "trailing",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "editor.stickyScroll.enabled": true,
+  "editor.linkedEditing": true,
+  "editor.formatOnSave": true,
+  "editor.suggestSelection": "first",
+  "editor.acceptSuggestionOnCommitCharacter": false,
+  "editor.inlineSuggest.enabled": true,
+  "editor.parameterHints.enabled": true,
+  "editor.wordWrap": "off",
+  "editor.cursorBlinking": "smooth",
+  "editor.smoothScrolling": true,
+  "editor.mouseWheelZoom": true,
+
+  // --- Sidebar & Layout (IntelliJ-clean) ---
+  "workbench.sideBar.location": "left",
+  "workbench.tree.indent": 20,
+  "workbench.activityBar.location": "default",
+  "breadcrumbs.enabled": true,
+  "explorer.compactFolders": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+
+  // --- Hide clutter from activity bar (keep only IntelliJ-like views) ---
+  "thunder-client.sidebar.showOnActivityBar": false,
+  "gitlens.views.home.visible": false,
+  "gitlens.views.worktrees.visible": false,
+  "gitlens.views.contributors.visible": false,
+  "gitlens.views.searchAndCompare.visible": false,
+  "gitlens.views.fileHistory.visible": false,
+  "gitlens.views.lineHistory.visible": false,
+  "gitlens.launchpad.indicator.enabled": false,
+
+  // --- Terminal ---
+  "terminal.integrated.fontFamily": "'JetBrains Mono', monospace",
+  "terminal.integrated.fontSize": 13,
+  "terminal.integrated.defaultProfile.linux": "zsh",
+
+  // --- Java ---
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.autobuild.enabled": true,
+  "java.saveActions.organizeImports": true,
+  "java.completion.importOrder": ["java", "javax", "org", "com"],
+  "java.sources.organizeImports.starThreshold": 5,
+  "java.sources.organizeImports.staticStarThreshold": 3,
+  "java.format.settings.profile": "GoogleStyle",
+  "java.codeGeneration.hashCodeEquals.useJava7Objects": true,
+  "java.codeGeneration.toString.template": "${object.className} [${member.name()}=${member.value}, ${otherMembers}]",
+
+  // --- Python ---
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.autoImportCompletions": true,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+
+  // --- Spring Boot ---
+  "spring-boot.ls.java.home": null,
+  "boot-java.rewrite.reconcile": true,
+
+  // --- Docker / Kubernetes ---
+  "docker.showStartPage": false,
+
+  // --- Git (IntelliJ-like) ---
+  "gitlens.codeLens.enabled": true,
+  "gitlens.currentLine.enabled": true,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+
+  // --- Files ---
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/__pycache__": true,
+    "**/.idea": true,
+    "**/target": false,
+    "**/build": false
+  },
+
+  // --- Search ---
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/target": true,
+    "**/build": true,
+    "**/.gradle": true
+  },
+
+  // --- Vibrant syntax colors (Gruvbox cranked up) ---
+  "editor.tokenColorCustomizations": {
+    "[Gruvbox Material Dark]": {
+      "textMateRules": [
+        { "scope": "keyword, storage.type, storage.modifier", "settings": { "foreground": "#FF5555" } },
+        { "scope": "string, string.quoted", "settings": { "foreground": "#50FA7B" } },
+        { "scope": "entity.name.function, support.function", "settings": { "foreground": "#5CB8FF" } },
+        { "scope": "variable, variable.other, variable.parameter", "settings": { "foreground": "#FFD54F" } },
+        { "scope": "constant.numeric, constant.language", "settings": { "foreground": "#FF9E64" } },
+        { "scope": "entity.name.type, entity.name.class, support.type", "settings": { "foreground": "#FFCC00" } },
+        { "scope": "entity.other.attribute-name", "settings": { "foreground": "#D670FF" } },
+        { "scope": "comment, punctuation.definition.comment", "settings": { "foreground": "#7E8A8E", "fontStyle": "italic" } },
+        { "scope": "entity.name.tag", "settings": { "foreground": "#FF5555" } },
+        { "scope": "support.class, entity.other.inherited-class", "settings": { "foreground": "#4EEBC8" } },
+        { "scope": "meta.decorator, punctuation.decorator", "settings": { "foreground": "#D670FF" } },
+        { "scope": "keyword.operator", "settings": { "foreground": "#56D6FF" } }
+      ]
+    }
+  },
+
+  // --- dbt ---
+  "files.associations": {
+    "*.sql": "jinja-sql"
+  },
+  "[jinja-sql]": {
+    "editor.defaultFormatter": "innoverio.vscode-dbt-power-user",
+    "editor.formatOnSave": true
+  },
+  "dbt.enableNewLineagePanel": true,
+
+  // --- Telemetry ---
+  "telemetry.telemetryLevel": "off"
+}

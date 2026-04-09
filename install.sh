@@ -206,8 +206,88 @@ cp "$SCRIPT_DIR/configs/datagrip/dataSources.xml" ~/DataGripProjects/Ridango/.id
 cp "$SCRIPT_DIR/configs/datagrip/dataSources.local.xml" ~/DataGripProjects/Ridango/.idea/dataSources.local.xml
 echo "  -> All database connections restored (passwords need re-entering)"
 
-# --- 13. Claude Code multi-account ---
-echo "[13/13] Setting up Claude Code..."
+# Configure JetBrains IDEs appearance (font + Gruvbox theme to match VS Code)
+echo "  -> Configuring JetBrains IDE appearance to match VS Code..."
+
+# Download Gruvbox theme plugin (compatible with 2023.3+)
+GRUVBOX_JAR="/tmp/gruvbox-theme.jar"
+if [ ! -f "$GRUVBOX_JAR" ]; then
+    curl -fsSL "https://plugins.jetbrains.com/plugin/download?rel=true&updateId=652279" -o "$GRUVBOX_JAR"
+fi
+
+# Map snap names to config directory prefixes
+declare -A IDE_DIRS=(
+    ["intellij-idea-ultimate"]="IntelliJIdea"
+    ["pycharm-professional"]="PyCharm"
+    ["datagrip"]="DataGrip"
+)
+
+for snap_name in "${!IDE_DIRS[@]}"; do
+    prefix="${IDE_DIRS[$snap_name]}"
+
+    # Find existing config dir or create one based on snap version
+    cfg_dir=$(ls -d "$HOME/.config/JetBrains/${prefix}"* 2>/dev/null | head -1)
+    if [ -z "$cfg_dir" ]; then
+        ver=$(snap info "$snap_name" 2>/dev/null | grep "installed:" | awk '{print $2}' | cut -d. -f1,2)
+        if [ -n "$ver" ]; then
+            cfg_dir="$HOME/.config/JetBrains/${prefix}${ver}"
+        fi
+    fi
+
+    # Find existing data dir or create one based on snap version
+    data_dir=$(ls -d "$HOME/.local/share/JetBrains/${prefix}"* 2>/dev/null | head -1)
+    if [ -z "$data_dir" ]; then
+        ver=$(snap info "$snap_name" 2>/dev/null | grep "installed:" | awk '{print $2}' | cut -d. -f1,2)
+        if [ -n "$ver" ]; then
+            data_dir="$HOME/.local/share/JetBrains/${prefix}${ver}"
+        fi
+    fi
+
+    if [ -n "$cfg_dir" ]; then
+        mkdir -p "$cfg_dir/options" "$cfg_dir/colors"
+        cp "$SCRIPT_DIR/configs/jetbrains/editor-font.xml" "$cfg_dir/options/editor-font.xml"
+        cp "$SCRIPT_DIR/configs/jetbrains/console-font.xml" "$cfg_dir/options/console-font.xml"
+        cp "$SCRIPT_DIR/configs/jetbrains/laf.xml" "$cfg_dir/options/laf.xml"
+        cp "$SCRIPT_DIR/configs/jetbrains/colors.scheme.xml" "$cfg_dir/options/colors.scheme.xml"
+        cp "$SCRIPT_DIR/configs/jetbrains/Gruvbox_Vibrant.icls" "$cfg_dir/colors/Gruvbox_Vibrant.icls"
+        echo "  -> $(basename "$cfg_dir"): font + Gruvbox Vibrant theme configured"
+    fi
+
+    if [ -n "$data_dir" ]; then
+        mkdir -p "$data_dir/Gruvbox Theme/lib"
+        cp "$GRUVBOX_JAR" "$data_dir/Gruvbox Theme/lib/Gruvbox_Theme.jar"
+        echo "  -> $(basename "$data_dir"): Gruvbox plugin installed"
+    fi
+done
+
+rm -f "$GRUVBOX_JAR"
+
+# --- 13. VS Code ---
+echo "[13/14] Installing VS Code..."
+if command -v code &>/dev/null; then
+    echo "  -> VS Code already installed"
+else
+    curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/packages.microsoft.gpg
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
+    sudo apt update
+    sudo apt install -y code
+    echo "  -> VS Code installed"
+fi
+
+# Copy settings
+mkdir -p ~/.config/Code/User
+cp "$SCRIPT_DIR/configs/vscode-settings.json" ~/.config/Code/User/settings.json
+echo "  -> VS Code settings restored"
+
+# Install extensions
+echo "  -> Installing VS Code extensions..."
+while IFS= read -r ext; do
+    code --install-extension "$ext" --force 2>/dev/null || true
+done < "$SCRIPT_DIR/configs/vscode-extensions.txt"
+echo "  -> VS Code extensions installed"
+
+# --- 14. Claude Code multi-account ---
+echo "[14/14] Setting up Claude Code..."
 mkdir -p ~/.claude-private
 echo "  -> ~/.claude-private created"
 

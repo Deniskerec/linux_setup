@@ -1,0 +1,224 @@
+<scheme name="Gruvbox Vibrant" version="142" parent_scheme="Gruvbox Dark Medium">
+  <metaInfo>
+    <property name="originalScheme">Gruvbox Vibrant</property>
+  </metaInfo>
+  <attributes>
+    <!-- Keywords: hot red -->
+    <option name="DEFAULT_KEYWORD">
+      <value>
+        <option name="FOREGROUND" value="ff5555" />
+        <option name="FONT_TYPE" value="1" />
+      </value>
+    </option>
+
+    <!-- Strings: neon green -->
+    <option name="DEFAULT_STRING">
+      <value>
+        <option name="FOREGROUND" value="50fa7b" />
+      </value>
+    </option>
+
+    <!-- Numbers: bright orange -->
+    <option name="DEFAULT_NUMBER">
+      <value>
+        <option name="FOREGROUND" value="ff9e64" />
+      </value>
+    </option>
+
+    <!-- Function calls: bright blue -->
+    <option name="DEFAULT_FUNCTION_CALL">
+      <value>
+        <option name="FOREGROUND" value="5cb8ff" />
+      </value>
+    </option>
+
+    <!-- Function declarations: bright blue bold -->
+    <option name="DEFAULT_FUNCTION_DECLARATION">
+      <value>
+        <option name="FOREGROUND" value="5cb8ff" />
+        <option name="FONT_TYPE" value="1" />
+      </value>
+    </option>
+
+    <!-- Static methods: bright blue italic -->
+    <option name="DEFAULT_STATIC_METHOD">
+      <value>
+        <option name="FOREGROUND" value="5cb8ff" />
+        <option name="FONT_TYPE" value="2" />
+      </value>
+    </option>
+
+    <!-- Local variables: bright amber -->
+    <option name="DEFAULT_LOCAL_VARIABLE">
+      <value>
+        <option name="FOREGROUND" value="ffd54f" />
+      </value>
+    </option>
+
+    <!-- Parameters: bright amber -->
+    <option name="DEFAULT_PARAMETER">
+      <value>
+        <option name="FOREGROUND" value="ffd54f" />
+      </value>
+    </option>
+
+    <!-- Global variables: bright amber -->
+    <option name="DEFAULT_GLOBAL_VARIABLE">
+      <value>
+        <option name="FOREGROUND" value="ffd54f" />
+      </value>
+    </option>
+
+    <!-- Instance fields: bright amber -->
+    <option name="DEFAULT_INSTANCE_FIELD">
+      <value>
+        <option name="FOREGROUND" value="ffd54f" />
+      </value>
+    </option>
+
+    <!-- Static fields: bright amber italic -->
+    <option name="DEFAULT_STATIC_FIELD">
+      <value>
+        <option name="FOREGROUND" value="ffd54f" />
+        <option name="FONT_TYPE" value="2" />
+      </value>
+    </option>
+
+    <!-- Constants: bright orange bold -->
+    <option name="DEFAULT_CONSTANT">
+      <value>
+        <option name="FOREGROUND" value="ff9e64" />
+        <option name="FONT_TYPE" value="1" />
+      </value>
+    </option>
+
+    <!-- Classes: bright yellow -->
+    <option name="DEFAULT_CLASS_NAME">
+      <value>
+        <option name="FOREGROUND" value="ffcc00" />
+      </value>
+    </option>
+
+    <!-- Interfaces: bright teal -->
+    <option name="DEFAULT_INTERFACE_NAME">
+      <value>
+        <option name="FOREGROUND" value="4eebc8" />
+      </value>
+    </option>
+
+    <!-- Annotations/decorators: bright purple -->
+    <option name="DEFAULT_METADATA">
+      <value>
+        <option name="FOREGROUND" value="d670ff" />
+      </value>
+    </option>
+
+    <!-- Operators: bright cyan -->
+    <option name="DEFAULT_OPERATION_SIGN">
+      <value>
+        <option name="FOREGROUND" value="56d6ff" />
+      </value>
+    </option>
+
+    <!-- Tags (XML/HTML): hot red -->
+    <option name="DEFAULT_TAG">
+      <value>
+        <option name="FOREGROUND" value="ff5555" />
+      </value>
+    </option>
+
+    <!-- Attributes (XML/HTML): bright purple -->
+    <option name="DEFAULT_ATTRIBUTE">
+      <value>
+        <option name="FOREGROUND" value="d670ff" />
+      </value>
+    </option>
+
+    <!-- Comments: muted gray italic -->
+    <option name="DEFAULT_LINE_COMMENT">
+      <value>
+        <option name="FOREGROUND" value="7e8a8e" />
+        <option name="FONT_TYPE" value="2" />
+      </value>
+    </option>
+    <option name="DEFAULT_BLOCK_COMMENT">
+      <value>
+        <option name="FOREGROUND" value="7e8a8e" />
+        <option name="FONT_TYPE" value="2" />
+      </value>
+    </option>
+    <option name="DEFAULT_DOC_COMMENT">
+      <value>
+        <option name="FOREGROUND" value="7e8a8e" />
+        <option name="FONT_TYPE" value="2" />
+      </value>
+    </option>
+    <option name="DEFAULT_DOC_COMMENT_TAG">
+      <value>
+        <option name="FOREGROUND" value="56d6ff" />
+        <option name="FONT_TYPE" value="3" />
+      </value>
+    </option>
+
+    <!-- SQL keywords (for DataGrip): hot red bold -->
+    <option name="SQL_KEYWORD">
+      <value>
+        <option name="FOREGROUND" value="ff5555" />
+        <option name="FONT_TYPE" value="1" />
+      </value>
+    </option>
+    <option name="SQL_STRING">
+      <value>
+        <option name="FOREGROUND" value="50fa7b" />
+      </value>
+    </option>
+    <option name="SQL_NUMBER">
+      <value>
+        <option name="FOREGROUND" value="ff9e64" />
+      </value>
+    </option>
+    <option name="SQL_COLUMN">
+      <value>
+        <option name="FOREGROUND" value="ffd54f" />
+      </value>
+    </option>
+    <option name="SQL_TABLE">
+      <value>
+        <option name="FOREGROUND" value="ffcc00" />
+      </value>
+    </option>
+    <option name="SQL_SCHEMA">
+      <value>
+        <option name="FOREGROUND" value="4eebc8" />
+      </value>
+    </option>
+    <option name="SQL_DATABASE">
+      <value>
+        <option name="FOREGROUND" value="4eebc8" />
+        <option name="FONT_TYPE" value="1" />
+      </value>
+    </option>
+    <option name="SQL_ALIAS">
+      <value>
+        <option name="FOREGROUND" value="d670ff" />
+        <option name="FONT_TYPE" value="2" />
+      </value>
+    </option>
+    <option name="SQL_SYNTHETIC_ENTITY">
+      <value>
+        <option name="FOREGROUND" value="5cb8ff" />
+      </value>
+    </option>
+    <option name="SQL_PROCEDURE">
+      <value>
+        <option name="FOREGROUND" value="5cb8ff" />
+        <option name="FONT_TYPE" value="1" />
+      </value>
+    </option>
+    <option name="SQL_OUTER_QUERY_COLUMN">
+      <value>
+        <option name="FOREGROUND" value="56d6ff" />
+      </value>
+    </option>
+  </attributes>
+</scheme>
